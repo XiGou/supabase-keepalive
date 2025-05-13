@@ -1,9 +1,20 @@
 const { createClient } = require('@supabase/supabase-js');
 
 // Initialize Supabase client
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const supabaseTableName = process.env.TABLE_NAME || "test";
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim();
+const supabaseTableName = process.env.TABLE_NAME?.trim() || "test";
+
+// Validate environment variables
+if (!supabaseUrl || !supabaseUrl.startsWith('https://')) {
+  console.error('Error: NEXT_PUBLIC_SUPABASE_URL is missing or invalid');
+  process.exit(1);
+}
+if (!supabaseKey) {
+  console.error('Error: NEXT_PUBLIC_SUPABASE_ANON_KEY is missing');
+  process.exit(1);
+}
+
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Example query: Fetch all users from a 'users' table
